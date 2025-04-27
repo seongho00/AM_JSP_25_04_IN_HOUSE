@@ -16,8 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/doWrite/page")
-public class ArticledoWritePageServlet extends HttpServlet {
+@WebServlet("/article/doModify")
+public class ArticledoModifyServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -39,12 +39,21 @@ public class ArticledoWritePageServlet extends HttpServlet {
 			conn = DriverManager.getConnection(url, "root", "");
 			response.getWriter().append("연결 성공!");
 
+			SecSql sql = new SecSql();
 
-			
-			request.getRequestDispatcher("/jsp/article/doWrite.jsp").forward(request, response);
+			String title = request.getParameter("title");
+			int id = Integer.parseInt(request.getParameter("id"));
+			String body = request.getParameter("body");
 
+			sql.append("UPDATE article ");
+			sql.append("SET regDate = NOW(),");
+			sql.append("title = ?,", title);
+			sql.append("`body` = ?", body);
+			sql.append("WHERE id = ?;", id);
 
-			
+			DBUtil.update(conn, sql);
+
+			response.getWriter().append(String.format("<script>location.replace('list');</script>"));
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);
