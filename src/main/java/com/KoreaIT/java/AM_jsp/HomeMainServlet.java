@@ -11,12 +11,11 @@ import java.io.IOException;
 @WebServlet("/home/main")
 public class HomeMainServlet extends HttpServlet {
 
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		response.getWriter().append("Hello").append(request.getContextPath());
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		
+		request.getRequestDispatcher("/jsp/home/main.jsp").forward(request, response);
 	}
-
-
 
 }
